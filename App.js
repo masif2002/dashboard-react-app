@@ -8,11 +8,17 @@ import { Ecommerce, Orders, Calendar, Editor, Employees, Stacked, Pyramid, Line,
 
 import './App.css'
 
-const activeMenu = true;
+import { useStateContext } from './contexts/ContextProvider';
+
+
 
 const App = () => {
+
+  const { activeMenu, setActiveMenu, themeBar, setThemeBar, currentColor, currentMode } = useStateContext(true);
+  // const activeMenu = true;
+
   return (
-    <div>
+    <div className={currentMode === 'Dark' ? 'dark':' '}>
       <BrowserRouter>
         {/* Main Container */}
         <div className='flex relative dark:bg-main-dark-bg'>
@@ -21,7 +27,8 @@ const App = () => {
           <div className='fixed right-4 bottom-4'
           style={{ zIndex: '1000' }}>
             <TooltipComponent content="Settings" position='Top'>
-              <button type='button' className='text-3xl text-white p-5 hover:drop-shadow-xl hover:bg-light-gray' style={{ background: 'blue', borderRadius: '50%' }}>
+              <button type='button' className='text-3xl text-white p-5 hover:drop-shadow-xl hover:bg-light-gray' style={{ background: currentColor, borderRadius: '50%' }}
+              onClick={() => setThemeBar(!themeBar)}>
                 <FiSettings />  
               </button>
             </TooltipComponent>
@@ -37,36 +44,42 @@ const App = () => {
             <Sidebar />
           </div>
           )}
-
-          {/* Navigation Bar */}
-          <div className={`bg-white dark:bg-secondary-dark-bg min-h-screen w-full ${activeMenu ? 'md:ml-72' : 'flex-2'}`}>
+          
+          {/* Container that spans full screen */}
+          <div className={`bg-gray-50 dark:bg-secondary-dark-bg min-h-screen w-full ${activeMenu ? 'md:ml-72' : 'flex-2'}`}>
+            {/* Navigation Bar */}
             <div className='fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full'>
-              {/* <Navbar /> */}
+              <Navbar />
             </div>
+            
+            {themeBar && <ThemeSettings />}
+            
+            {/* App Routes */}
+            <Routes>
+              <Route path='/' element={<Ecommerce />} />
+              <Route path='/ecommerce' element={<Ecommerce />} />
+
+
+              <Route path='/orders' element={<Orders />} />
+              <Route path='/employees' element={<Employees />} />
+              <Route path='/customers' element={<Customers />} />
+
+              <Route path='/calendar' element={<Calendar />} />
+              <Route path='/kanban' element={<Kanban />} />
+              <Route path='/editor' element={<Editor />} />
+              <Route path='/color-picker' element={<ColorPicker />} />
+              
+              <Route path='/line' element={<Line />} />
+              <Route path='/area' element={<Area />} />
+              <Route path='/bar' element={<Bar />} />
+              <Route path='/pie' element={<Pie />} />
+              <Route path='/financial' element={<Financial />} />
+              <Route path='/color-mapping' element={<ColorMapping />} />
+              <Route path='/pyramid' element={<Pyramid />} />
+              <Route path='/stacked' element={<Stacked />} />
+            </Routes>
           </div>
 
-          {/* Sidebar Elements */}
-          <Routes>
-            <Route path='/' element={<Ecommerce />} />
-
-            <Route path='/orders' element={<Orders />} />
-            <Route path='/employees' element={<Employees />} />
-            <Route path='/customers' element={<Customers />} />
-
-            <Route path='/calendar' element={<Calendar />} />
-            <Route path='/kanban' element={<Kanban />} />
-            <Route path='/editor' element={<Editor />} />
-            <Route path='/color-picker' element={<ColorPicker />} />
-            
-            <Route path='/line' element={<Line />} />
-            <Route path='/area' element={<Area />} />
-            <Route path='/bar' element={<Bar />} />
-            <Route path='/pie' element={<Pie />} />
-            <Route path='/financial' element={<Financial />} />
-            <Route path='/color-mapping' element={<ColorMapping />} />
-            <Route path='/pyramid' element={<Pyramid />} />
-            <Route path='/stacked' element={<Stacked />} />
-          </Routes>
         </div>
       </BrowserRouter>
     </div>
